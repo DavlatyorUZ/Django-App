@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block sarlavha %}Mening Blogim{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'blog/css/uslub.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <a class="brand" href="{% url 'bosh_sahifa' %}">🚀 Mening Ajoyib Blogim</a>
+
+            <form action="{% url 'qidiruv' %}" method="GET" class="search-form">
+                <input type="text" name="q" placeholder="Qidirish..." value="{{ request.GET.q }}">
+                <button type="submit">🔍</button>
+            </form>
+        </div>
+    </header>
+
+    <nav class="menu">
+        <div class="container menu-content">
+            <a href="{% url 'bosh_sahifa' %}">🏠 Bosh sahifa</a>
+            <a href="{% url 'ommabop' %}">🔥 Ommabop</a>
+            <a href="{% url 'biz_haqimizda' %}">👥 Biz haqimizda</a>
+            <a href="{% url 'portfolio' %}">💼 Portfolio</a>
+            <a href="{% url 'aloqa' %}">📧 Aloqa</a>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'post_yaratish' %}">✍️ Yangi post</a>
+                <a class="user-link" href="{% url 'profil' user.username %}">👤 {{ user.username }}</a>
+                <a href="{% url 'chiqish' %}">🚪 Chiqish</a>
+            {% else %}
+                <a href="{% url 'kirish' %}">🔐 Kirish</a>
+                <a href="{% url 'royxatdan_otish' %}">📝 Ro‘yxatdan o‘tish</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main class="content">
+        <div class="container page-container">
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% block kontent %}{% endblock %}
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© {% now "Y" %} Mening Blogim. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
